@@ -1,0 +1,83 @@
+FROM arm64v8/ros:noetic-ros-base-focal
+
+WORKDIR /app
+
+# Install system dependencies including libepoxy-dev
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    libglew-dev \
+    libeigen3-dev \
+    libopencv-dev \
+    libavcodec-dev \
+    libavutil-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libdc1394-22-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff5-dev \
+    libopenexr-dev \
+    libepoxy-dev \
+    libboost-serialization-dev \
+    libssl-dev \
+    python3-dev \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Pangolin dependencies manually
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-dev \
+    libglew-dev \
+    pkg-config \
+    libegl1-mesa-dev \
+    libwayland-dev \
+    libxkbcommon-dev \
+    wayland-protocols \
+    libeigen3-dev \
+    libavcodec-dev \
+    libavutil-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libavdevice-dev \
+    ffmpeg \
+    libpng-dev \
+    libjpeg-dev \
+    libtiff5-dev \
+    libopenexr-dev \
+    || apt-get install -y \
+    libgl1-mesa-dev \
+    libglew-dev \
+    pkg-config \
+    libegl1-mesa-dev \
+    libeigen3-dev \
+    libavcodec-dev \
+    libavutil-dev \
+    libavformat-dev \
+    libswscale-dev \
+    ffmpeg \
+    libpng-dev \
+    libjpeg-dev \
+    libtiff5-dev
+
+# Install Pangolin
+RUN git clone --recursive https://github.com/stevenlovegrove/Pangolin.git /opt/Pangolin \
+    && cd /opt/Pangolin \
+    && mkdir build && cd build \
+    && cmake .. -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_EXAMPLES=OFF \
+        -DBUILD_PANGOLIN_PYTHON=OFF \
+    && make -j$(nproc) \
+    && make install \
+    && ldconfig
+
+# Copy ORB_SLAM3 code
+COPY ORB_SLAM3 /app/ORB_SLAM3
+
+# Build ORB_SLAM3
+WORKDIR /app/ORB_SLAM3
+RUN chmod +x build.sh && ./build.sh
+
+WORKDIR /app
+CMD ["/bin/bash"]
