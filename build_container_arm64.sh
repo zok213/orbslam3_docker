@@ -27,6 +27,12 @@ fi
 # Enable QEMU for multi-architecture builds
 # docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
+# Clone ORB_SLAM3 repository if it doesn't exist
+if [ ! -d "ORB_SLAM3" ] || [ -z "$(ls -A ORB_SLAM3)" ]; then
+  echo "Cloning ORB_SLAM3 repository..."
+  git clone https://github.com/jahaniam/ORB_SLAM3.git ORB_SLAM3
+fi
+
 # Build the ARM64 Docker image
 docker buildx build --platform linux/arm64 -t orbslam3:arm64 -f Dockerfile.arm64 . --load
 

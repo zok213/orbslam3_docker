@@ -4,27 +4,28 @@ WORKDIR /app
 
 # Install system dependencies including libepoxy-dev
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
-    git \
-    libglew-dev \
-    libeigen3-dev \
-    libopencv-dev \
-    libavcodec-dev \
-    libavutil-dev \
-    libavformat-dev \
-    libswscale-dev \
+    build-essential cmake git pkg-config \
+    libgtk-3-dev libavcodec-dev libavformat-dev libswscale-dev \
+    libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev \
     libdc1394-22-dev \
-    libjpeg-dev \
-    libpng-dev \
-    libtiff5-dev \
-    libopenexr-dev \
+    libeigen3-dev \
+    libglew-dev \
     libepoxy-dev \
     libboost-serialization-dev \
     libssl-dev \
     python3-dev \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
+
+# Install OpenCV 4.5.5 from source
+RUN git clone --branch 4.5.5 https://github.com/opencv/opencv.git /opt/opencv \
+    && git clone --branch 4.5.5 https://github.com/opencv/opencv_contrib.git /opt/opencv_contrib \
+    && mkdir /opt/opencv/build && cd /opt/opencv/build \
+    && cmake -D CMAKE_BUILD_TYPE=Release \
+             -D CMAKE_INSTALL_PREFIX=/usr/local \
+             -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules \
+             -D BUILD_EXAMPLES=OFF .. \
+    && make -j$(nproc) && make install && ldconfig
 
 # Install Pangolin dependencies manually
 RUN apt-get update && apt-get install -y \
@@ -61,9 +62,10 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libtiff5-dev
 
-# Install Pangolin
-RUN git clone --recursive https://github.com/stevenlovegrove/Pangolin.git /opt/Pangolin \
+# Install Pangolin (stable v0.8 branch)
+RUN git clone https://github.com/stevenlovegrove/Pangolin.git /opt/Pangolin \
     && cd /opt/Pangolin \
+    && git checkout v0.8 \
     && mkdir build && cd build \
     && cmake .. -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_EXAMPLES=OFF \
@@ -78,6 +80,7 @@ COPY ORB_SLAM3 /app/ORB_SLAM3
 # Build ORB_SLAM3
 WORKDIR /app/ORB_SLAM3
 RUN chmod +x build.sh && ./build.sh
+RUN mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release && make -j$(nproc)
 
 WORKDIR /app
 CMD ["/bin/bash"]
