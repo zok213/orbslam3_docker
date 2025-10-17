@@ -1,0 +1,50 @@
+CPU Info:
+Architecture:                         aarch64
+CPU op-mode(s):                       32-bit, 64-bit
+Byte Order:                           Little Endian
+CPU(s):                               6
+On-line CPU(s) list:                  0-5
+Thread(s) per core:                   1
+Core(s) per socket:                   2
+Socket(s):                            3
+Vendor ID:                            ARM
+Model:                                1
+Stepping:                             r1p1
+Frequency boost:                      enabled
+CPU max MHz:                          3187.2000
+CPU min MHz:                          307.2000
+BogoMIPS:                             38.40
+Vulnerability Gather data sampling:   Not affected
+Vulnerability Itlb multihit:          Not affected
+Vulnerability L1tf:                   Not affected
+Vulnerability Mds:                    Not affected
+Vulnerability Meltdown:               Not affected
+Vulnerability Mmio stale data:        Not affected
+Vulnerability Reg file data sampling: Not affected
+Vulnerability Retbleed:               Not affected
+Vulnerability Spec rstack overflow:   Not affected
+Vulnerability Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:             Mitigation; __user pointer sanitization
+Vulnerability Spectre v2:             Vulnerable: Unprivileged eBPF enabled
+Vulnerability Srbds:                  Not affected
+Vulnerability Tsx async abort:        Not affected
+Flags:                                fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm sb paca pacg dcpodp flagm2 frint i8mm bf16 bti
+Memory Info:
+              total        used        free      shared  buff/cache   available
+Mem:           14Gi       2.8Gi       4.5Gi       6.0Mi       7.5Gi        12Gi
+Swap:         7.4Gi        20Mi       7.4Gi
+Disk Usage:
+Filesystem      Size  Used Avail Use% Mounted on
+overlay          94G   92G  2.3G  98% /
+tmpfs            64M     0   64M   0% /dev
+shm              64M     0   64M   0% /dev/shm
+/dev/sda2        94G   92G  2.3G  98% /app/results
+tmpfs           7.5G     0  7.5G   0% /proc/asound
+tmpfs           7.5G     0  7.5G   0% /sys/firmware
+Execution Time:
+
+real	3m21.046s
+user	4m53.924s
+sys	3m36.819s
+Trajectory Summary:
+3681 /app/results/CameraTrajectory.txt
